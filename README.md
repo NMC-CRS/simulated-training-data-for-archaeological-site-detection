@@ -9,7 +9,7 @@ The scripts included here require Python 3.10 maximum. The workflows described b
 
 The script ```generate_unknown_objects.py``` contains the functions we used to generate the training datasets for our paper. ```create_tar_kiln_like_objects()``` corresponds to the paper's "Method 1" and ```create_simple_objects()``` corresponds to the paper's "Method 2." These scripts work by creating the vector shapes shown below using size ranges provided by the user and placing them in suitable areas as defined by an exclusion model: 
 
-![Feature placement and vector creation overview](/docs/Figure_6.jpg)
+![Feature placement and vector creation overview](/docs/Figure_6.png)
 
 The functions return a list of three `numpy` arrays (indices 0, 1, and 2) and a `geopandas` GeoDataFrame (index 3). The first array is a binary annotation mask of the simulated objects (0), the second array is an annotation mask of the simulated objects with each object represented by a unique integer (1), and the third array is the modified raster with procedurally generated features added. The final output (list index 3) is a `geopandas` GeoDataFrame with each added object as its own vector annotation. 
 
@@ -95,7 +95,7 @@ In these scripts, we calculate the same metrics for training, validation, and te
 * **Precision**: The ratio of predicted pixels that are true positives
 * **F1 score**: The harmonic mean of recall and precision
 
-![Visual depiction of precision and recall](/docs/Precision_and_recall.jpg)
+![Visual depiction of precision and recall](/docs/Precision_and_recall.png)
 
 #### Apply a trained model to new data
 This step relies mainly on the `apply_pretrained_model_to_new_data.py` script. This script has two `main` functions: `main_without_metrics` can be used to apply to new data where we do not have any annotated objects to compare the predictions to (so, new data completely), whereas `main_with_metrics` can be used to apply the trained model on the full map used to train it, for which we may have object annotations already. The latter uses functions from `calculate_metrics.py` to calculate metrics between the model predictions and a provided shapefile of annotations.
@@ -107,7 +107,7 @@ In general, the `apply_pretrained_model_to_new_data.py` script's `main` function
 ## Post-processing
 The function ```assess_profile()``` in ```post_process.py``` iterates through a file of vector shapes and assesses the likelihood that each shape is a concave up or concave down object based on its major/minor axis profiles, as shown in the figure below:
 
-![Concave-up and concave-down profiles](docs/Figure_9.jpg)
+![Concave-up and concave-down profiles](/docs/Figure_9.png)
 
 In the paper, we use this function to exclude features that are likely mima mounds (a natural feature prevalent in the low-relief landscape of our study area). We also implemented a size exclusion and excluded all features that intersected or were within a certain distance of a drainage using QGIS, so no code is provided for those stages.
 
