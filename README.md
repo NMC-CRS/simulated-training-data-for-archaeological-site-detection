@@ -13,9 +13,9 @@ The script ```generate_unknown_objects.py``` contains the functions we used to g
 
 The functions return a list of three `numpy` arrays (indices 0, 1, and 2) and a `geopandas` GeoDataFrame (index 3). The first array is a binary annotation mask of the simulated objects (0), the second array is an annotation mask of the simulated objects with each object represented by a unique integer (1), and the third array is the modified raster with procedurally generated features added. The final output (list index 3) is a `geopandas` GeoDataFrame with each added object as its own vector annotation. 
 
-To use these DEMs with the MaskRCNN workflow described below, the second annotation mask (1) and the third array (2) should be exported as a georeferenced raster (at minimum; you may also wish to export the GeoDataFrame to a GeoPackage or shapefile to measure object by object performance in the test dataset). This can be accomplished [with rasterio](https://rasterio.readthedocs.io/en/stable/topics/writing.html) or [with GDAL](https://gdal.org/en/stable/tutorials/raster_api_tut.html) using the original input raster to set attributes like height, width, and data type.
+To use these DEMs with the Mask R-CNN workflow described below, the second annotation mask (1) and the third array (2) should be exported as a georeferenced raster (at minimum; you may also wish to export the GeoDataFrame to a GeoPackage or shapefile to measure object by object performance in the test dataset). This can be accomplished [with rasterio](https://rasterio.readthedocs.io/en/stable/topics/writing.html) or [with GDAL](https://gdal.org/en/stable/tutorials/raster_api_tut.html) using the original input raster to set attributes like height, width, and data type.
 
-## MaskRCNN Implementation
+## Mask R-CNN Implementation
 
 ### File organization
 These scripts use hard-coded relative paths. Data should be arranged in input and output folders in the following file structure:
@@ -55,7 +55,7 @@ We then used the `tile_raster_from_grid.py` script to tile each of our visualiza
 Similarly, we tiled the annotation mask using the same grids. The resulting tiles were placed in target folders with names that reflected their size and the buffer size around the objects. For example, the 256x256 tiles from the map with 20m buffers around terraces were saved in a folder called **Target_20m_256** within the **Terrace_masks** subfolder of **CNN_input**.
 
 #### Train a model
-This step relies mainly on the `maskrcnn_main_script.py` script, which calls the other MaskRCNN scripts.
+This step relies mainly on the `maskrcnn_main_script.py` script, which calls the other Mask R-CNN scripts.
 
 In general, `maskrcnn_main_script.py` calls `calc_mask_perc.py` to determine which mask tiles overlap with at least one object (i.e., which tile has some pixels with value > 0). This part allows setting a pre-processing threshold which is used to ignore any mask tile with less positive pixels than that threshold. This prevents training on tiles that have only very small fractions of the object to detect. This defines a list of tiles that will be used in the training/validation/testing of the model. Tiles without object are completely ignored in this step.
 
