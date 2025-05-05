@@ -63,7 +63,7 @@ Then, the script calls the `separate_datasets.py` script to separate the tiles i
 
 After separating and cleaning datasets, the script defines the data formatting and data loading workflow, which uses functions found in the `maskrcnn_dset_rgb.py` and `maskrcnn_transformations_rgb.py` scripts. 
 
-The script then imports the the ResNet50 pre-trained backbone by calling the script in the **mask_rcnn_backbones** folder (this is currently the only backbone available in our implementation) and then calls the `set_lr_parameters.py` script to set the learning rate of the model parameters that will learn to a starting rate of 0.001 and set learning rate of the frozen parameters to 0.
+The script then imports the ResNet50 pre-trained backbone by calling the script in the **mask_rcnn_backbones** folder (this is currently the only backbone available in our implementation) and then calls the `set_lr_parameters.py` script to set the learning rate of the model parameters that will learn to a starting rate of 0.001 and set learning rate of the frozen parameters to 0.
 
 When all of these pre-processing steps are done, the script creates a ***filename*** variable and prints it to the Console. This variable holds the name that will be used to save weights if necessary, as well as to create prediction maps in the 3rd step of the workflow. This name holds a lot of information in a specific order, which can be automatically parsed:
 
@@ -79,11 +79,11 @@ When all of these pre-processing steps are done, the script creates a ***filenam
 * **vis1**: The name of the first visualization used
 * **vis2**: The name of the second visualization used
 * **vis3**: The name of the third visualization used
-* **threshold**: Post-processing threshold (for 3rd step) that will automatically remove predicted objects smaller than this given value
+* **threshold**: Pre-processing threshold. The model automatically ignores training tiles with fewer positive pixels than this value
 * **im_size**: Size (height and width) of the training tiles
 * **time_stamp**: Unique time stamp that ensures trainings run with the same parameters will not overwrite previous runs
 
-Therefore, the filename ***MaskRCNN_ResNet50_20ep_5m_MaskRCNN_loss_8bs_lrVariable_SLRM20m_SLRM10m_Slope_100Thresh_256_1709159091*** says that this training was done using **ResNet50** pre-trained weights. The learning rate of the model changed when validation loss started stagnating. The model was trained on **256x256 pixel** images that combined **SLRM 20m**, **SLRM 10m**, and **Slope** visualizations fed in batches of **8 images**. The mask tiles used to teach the model were from **5m** buffers around the annotated objects. Finally, this training was done over **20 epochs**.
+Therefore, the filename ***MaskRCNN_ResNet50_20ep_5m_MaskRCNN_loss_8bs_lrVariable_SLRM20m_SLRM10m_Slope_100Thresh_256_1709159091*** says that this training was done using **ResNet50** pre-trained weights. The learning rate of the model changed when validation loss started stagnating. The model was trained on **256x256 pixel** images that combined **SLRM 20m**, **SLRM 10m**, and **Slope** visualizations fed in batches of **8 images**, but ignored tiles with fewer than 100 positive pixels. The mask tiles used to teach the model were from **5m** buffers around the annotated objects. Finally, this training was done over **20 epochs**.
 
 At that point, the script calls its `train_and_validate_model` functions, which loads the training tiles. This script pre-processes the tiles by combining the 3 visualizations into a 3-band tile, applying data augmentations, and computing bounding boxes around each mask. It compares its predictions to the actual masks and boxes to compute the loss, and goes back through its parameters to update their weights in order to diminish that loss. It then loads the validation tiles and pre-processes them (no augmentation for validation tiles, however) and runs them through the model to compute validation metrics. The `train_and_validate_model` function does this loop for the number of epochs specified by the user (```n_epochs```).
 
