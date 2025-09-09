@@ -105,11 +105,11 @@ In general, the `apply_pretrained_model_to_new_data.py` script's `main` function
 ***IMPORTANT NOTE***: To apply a pretrained model to new data, you need to make sure that the new data is in the same format as the trained data (visualizations and tile sizes). The new data should also be stored in the same file structure as shown above, as the model uses hard-coded relative paths and variable names to find those folders.
 
 ## Post-processing
-The function ```assess_profile()``` in ```post_process.py``` iterates through a file of vector shapes and assesses the likelihood that each shape is a concave up or concave down object based on its major/minor axis profiles, as shown in the figure below:
+The function ```assess_profile()``` in ```post_process.py``` iterates through a file of vector shapes and assesses the likelihood that each shape is a pit-like or dome-like object based on the concavity of its major/minor axis profiles, as shown in the figure below:
 
 ![Concave-up and concave-down profiles](/docs/Figure_9.png)
 
-In the paper, we use this function to exclude features that are likely mima mounds (a natural feature prevalent in the low-relief landscape of our study area). We also implemented a size exclusion and excluded all features that intersected or were within a certain distance of a drainage using QGIS, so no code is provided for those stages.
+In the paper, we use this function to exclude features that are likely mima mounds (a natural feature prevalent in the low-relief landscape of our study area), which are dome-like ("concave down"). We also implemented a size exclusion and excluded all features that intersected or were within a certain distance of a drainage using QGIS, so no code is provided for those stages.
 
 ## Support
 For support, contact one of the authors of this repository or open an issue.
