@@ -1,4 +1,6 @@
 # Simulated training data for archaeological site detection
+[![DOI](https://zenodo.org/badge/978351553.svg)](https://doi.org/10.5281/zenodo.17082763)
+
 ## Description
 This repository holds the code we used to assess the efficacy of procedurally generated archaeological site images for training a deep learning model to detect archaeological sites in lidar data. The scripts included in the ```utils``` folder allow the user to create a procedurally generated dataset of tar-kiln-like objects in a lidar-derived DEM and train a Mask R-CNN model using a pretrained ResNet50 backbone.
 
